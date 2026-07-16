@@ -33,17 +33,6 @@ function buildIntro(): HTMLElement {
   ])
 }
 
-function wireThemeToggle(): void {
-  const btn = document.getElementById('cl-theme-toggle')
-  if (!btn) return
-  btn.addEventListener('click', () => {
-    const root = document.documentElement
-    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light'
-    root.setAttribute('data-theme', next)
-    localStorage.setItem('theme', next)
-  })
-}
-
 function mount(): void {
   const panels = document.getElementById('panels')
   if (!panels) return
@@ -58,7 +47,6 @@ function mount(): void {
     buildAffectedPanel(),
     buildScopeNotes(),
   )
-  wireThemeToggle()
   autoRun()
 }
 
