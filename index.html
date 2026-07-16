@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Theme contract (anti-flash): set before any stylesheet. Dark default. -->
+    <script>
+      (function () {
+        const saved = localStorage.getItem('theme')
+        document.documentElement.setAttribute('data-theme', saved ?? 'dark')
+      })()
+    </script>
+    <title>Salamander — crypto-lab</title>
+    <meta
+      name="description"
+      content="One AES-GCM ciphertext that decrypts to two different valid plaintexts under two different keys — a browser demo of key commitment and the invisible-salamanders attack."
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦎</text></svg>"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#app">Skip to content</a>
+
+    <!-- Shared top bar (the single banner landmark; owns the theme toggle). -->
+    <header class="cl-topbar" role="banner">
+      <a class="cl-topbar-brand" href="https://crypto-lab.systemslibrarian.dev/">Crypto&nbsp;Lab</a>
+      <div class="cl-topbar-actions">
+        <a
+          class="cl-topbar-link"
+          href="https://github.com/systemslibrarian/crypto-lab-salamander"
+          rel="noopener"
+          >GitHub</a
+        >
+        <button id="cl-theme-toggle" class="cl-topbar-toggle" type="button" aria-label="Toggle light and dark theme">
+          <span class="cl-toggle-dark" aria-hidden="true">🌙</span>
+          <span class="cl-toggle-light" aria-hidden="true">☀️</span>
+          <span class="cl-toggle-text">Theme</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="app">
+      <!-- Hero (standardized). Exactly one <h1> on the page. -->
+      <header class="cl-hero">
+        <div class="cl-hero-main">
+          <h1 class="cl-hero-title">Salamander</h1>
+          <p class="cl-hero-sub">Key commitment in AEAD · invisible salamanders</p>
+          <p class="cl-hero-desc">
+            Forge one real AES-GCM ciphertext and tag that WebCrypto accepts under two different keys, decrypting to two
+            different messages — then watch the security verdict fire even though every tag check passes.
+          </p>
+        </div>
+        <aside class="cl-hero-why" aria-label="Why it matters">
+          <span class="cl-hero-why-label">WHY IT MATTERS</span>
+          <p class="cl-hero-why-text">
+            Every system that reads “the tag verified” as “this is the message that was sent to me” is trusting a
+            property AES-GCM never promised. It cost Facebook Messenger a blind spot in its abuse-reporting pipeline.
+          </p>
+        </aside>
+      </header>
+
+      <div id="panels"></div>
+    </main>
+
+    <footer class="scripture-footer">
+      <p>So whether you eat or drink or whatever you do, do it all for the glory of God. — 1 Corinthians 10:31</p>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

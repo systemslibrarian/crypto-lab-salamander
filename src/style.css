@@ -1,0 +1,826 @@
+/* ============================================================================
+   Salamander — crypto-lab. Palette defined under :root (dark default) with
+   light overrides under :root[data-theme="light"]. Contrast authored for
+   WCAG 2.1 AA in both themes. Color never carries state alone (icon + text too).
+   ============================================================================ */
+
+:root {
+  color-scheme: dark;
+  --bg: #0d1117;
+  --panel: #161b22;
+  --panel-2: #1c2330;
+  --text: #e6edf3;
+  --text-dim: #aeb6c0;
+  --text-muted: #8b949e;
+  --border: #30363d;
+  --border-strong: #4d5866;
+
+  --accent: #059669; /* brand fill / borders (the demo's catalog accent) */
+  --accent-text: #34d399; /* accent used as text/link on dark bg */
+  --accent-ink: #03130c; /* text placed ON an accent fill */
+  --accent-soft: rgba(5, 150, 105, 0.14);
+
+  --ok: #56d364; /* cryptographic result: tag verified */
+  --ok-text: #56d364;
+  --ok-ink: #05230c;
+  --ok-soft: rgba(63, 185, 80, 0.14);
+
+  --alarm: #ff7b72; /* security verdict: system integrity broken */
+  --alarm-text: #ff7b72;
+  --alarm-ink: #2b0907;
+  --alarm-soft: rgba(248, 81, 73, 0.14);
+  --alarm-border: #f85149;
+
+  --warn: #e3b341; /* folk-fix "looks fixed but isn't" */
+  --warn-text: #e3b341;
+  --warn-ink: #241a00;
+  --warn-soft: rgba(227, 179, 65, 0.14);
+
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  --maxw: 68rem;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --panel: #f6f8fa;
+  --panel-2: #eef1f5;
+  --text: #1f2328;
+  --text-dim: #47505b;
+  --text-muted: #5a636e;
+  --border: #d0d7de;
+  --border-strong: #a9b2bd;
+
+  --accent: #047857;
+  --accent-text: #036b4d;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(4, 120, 87, 0.1);
+
+  --ok: #1a7f37;
+  --ok-text: #14722f;
+  --ok-ink: #ffffff;
+  --ok-soft: rgba(26, 127, 55, 0.1);
+
+  --alarm: #cf222e;
+  --alarm-text: #b21c27;
+  --alarm-ink: #ffffff;
+  --alarm-soft: rgba(207, 34, 46, 0.09);
+  --alarm-border: #cf222e;
+
+  --warn: #9a6700;
+  --warn-text: #8a5c00;
+  --warn-ink: #ffffff;
+  --warn-soft: rgba(154, 103, 0, 0.1);
+}
+
+html {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 0.6rem 1rem;
+  border-radius: 0 0 8px 0;
+  z-index: 100;
+  text-decoration: none;
+}
+.skip-link:focus {
+  left: 0;
+}
+
+/* --- Shared top bar: always dark, self-contained (scope base rules to #app) --- */
+.cl-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem clamp(1rem, 4vw, 2rem);
+  background-color: #0b0f14;
+  color: #e6edf3;
+  border-bottom: 1px solid #232a33;
+}
+.cl-topbar-brand {
+  font-weight: 700;
+  color: #e6edf3;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.cl-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.cl-topbar-link {
+  color: #c9d1d9;
+  text-decoration: underline;
+  font-size: 0.92rem;
+}
+.cl-topbar-link:hover {
+  color: #fff;
+}
+.cl-topbar-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #1c232c;
+  color: #e6edf3;
+  border: 1px solid #313b47;
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.cl-topbar-toggle:hover {
+  border-color: #4d5866;
+}
+.cl-toggle-light {
+  display: none;
+}
+:root[data-theme="light"] .cl-toggle-dark {
+  display: none;
+}
+:root[data-theme="light"] .cl-toggle-light {
+  display: inline;
+}
+
+/* --- Layout --- */
+#app {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 2rem) 3rem;
+}
+
+/* --- Hero (standardized managed block) --- */
+/* BEGIN cl-hero standard — managed, keep in sync across fleet */
+.cl-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(1rem, 4vw, 3rem);
+  flex-wrap: wrap;
+  margin: clamp(1rem, 3vw, 2rem) 0 1.5rem;
+}
+.cl-hero-main {
+  flex: 1 1 22rem;
+  min-width: min(100%, 20rem);
+}
+.cl-hero-title {
+  margin: 0;
+  font-size: clamp(1.6rem, 3.8vw, 2.7rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+}
+.cl-hero-sub {
+  margin: 0.4rem 0 0;
+  font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+  letter-spacing: 0.01em;
+  color: var(--text-dim);
+}
+.cl-hero-desc {
+  margin: 0.55rem 0 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-dim);
+  max-width: 60ch;
+}
+.cl-hero-why {
+  flex: 0 1 min(40%, 26rem);
+  min-width: min(100%, 15rem);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1.05rem;
+  background: color-mix(in oklab, var(--accent) 6%, transparent);
+}
+.cl-hero-why-label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent-text);
+}
+.cl-hero-why-text {
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+@media (max-width: 640px) {
+  .cl-hero {
+    flex-direction: column;
+  }
+  .cl-hero-why {
+    flex-basis: auto;
+    width: 100%;
+  }
+}
+/* END cl-hero standard */
+
+/* --- Panels & typography (scoped to #app so they don't fight the top bar) --- */
+#app .panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: clamp(1rem, 3vw, 1.6rem);
+  margin: 1.5rem 0;
+}
+#app .panel > h2 {
+  margin: 0 0 0.2rem;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+#app .panel-num {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--accent-text);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 0.05rem 0.4rem;
+}
+#app .panel-lead {
+  color: var(--text-dim);
+  margin: 0.3rem 0 1rem;
+  max-width: 70ch;
+}
+#app p {
+  color: var(--text);
+}
+#app .dim {
+  color: var(--text-dim);
+}
+
+#app a {
+  color: var(--accent-text);
+  text-decoration: underline;
+}
+#app a:hover {
+  text-decoration: none;
+}
+
+#app h3 {
+  font-size: 1.02rem;
+  margin: 1.2rem 0 0.5rem;
+}
+
+/* --- Intro card --- */
+#app .intro {
+  border-left: 4px solid var(--accent);
+}
+#app .intro h2 {
+  margin-top: 0;
+}
+
+/* --- Controls --- */
+#app label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0 0 0.3rem;
+  color: var(--text);
+}
+#app input[type="text"],
+#app textarea {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+}
+#app input[type="text"]:focus,
+#app textarea:focus,
+#app button:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+}
+#app .field-note {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 0.25rem 0 0;
+}
+
+#app button.btn {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+#app button.btn:hover {
+  filter: brightness(1.08);
+}
+#app button.btn.secondary {
+  background: transparent;
+  color: var(--accent-text);
+  border-color: var(--border-strong);
+}
+#app button.btn:disabled {
+  opacity: 1;
+  filter: grayscale(0.4);
+  cursor: not-allowed;
+  border-color: var(--border);
+  background: var(--panel-2);
+  color: var(--text-muted);
+}
+
+.controls-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 0.4rem;
+}
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 640px) {
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- The two indicators: cryptographic RESULT vs security VERDICT --- */
+.readers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+@media (max-width: 640px) {
+  .readers {
+    grid-template-columns: 1fr;
+  }
+}
+.reader-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  background: var(--panel-2);
+}
+.reader-card h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+.result-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--ok);
+  color: var(--ok-text);
+  background: var(--ok-soft);
+}
+.result-badge.bad {
+  border-color: var(--alarm-border);
+  color: var(--alarm-text);
+  background: var(--alarm-soft);
+}
+.reader-msg {
+  margin: 0.7rem 0 0;
+  font-family: var(--mono);
+  font-size: 1.02rem;
+  background: var(--bg);
+  border: 1px dashed var(--border-strong);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  word-break: break-word;
+}
+.reader-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* The verdict is a SEPARATE, independently rendered indicator (never merged). */
+.verdict {
+  margin-top: 1rem;
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  border: 2px solid var(--border-strong);
+  background: var(--panel-2);
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+}
+.verdict.alarm {
+  border-color: var(--alarm-border);
+  background: var(--alarm-soft);
+}
+.verdict.safe {
+  border-color: var(--ok);
+  background: var(--ok-soft);
+}
+.verdict-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.verdict-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.verdict.alarm .verdict-title {
+  color: var(--alarm-text);
+}
+.verdict.safe .verdict-title {
+  color: var(--ok-text);
+}
+.verdict-body {
+  margin: 0.25rem 0 0;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+.sep-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0.6rem 0 0;
+}
+
+/* --- Block layout visualization --- */
+.blockmap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.8rem 0;
+}
+.block {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--border-strong);
+  min-width: 6.5rem;
+}
+.block .block-role {
+  display: block;
+  font-weight: 700;
+  font-size: 0.66rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.2rem;
+}
+.block.msg1 {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.block.msg1 .block-role {
+  color: var(--accent-text);
+}
+.block.msg2 {
+  border-color: #6ea8fe;
+  background: rgba(110, 168, 254, 0.12);
+}
+:root[data-theme="light"] .block.msg2 {
+  border-color: #3b6fd4;
+  background: rgba(59, 111, 212, 0.1);
+}
+.block.msg2 .block-role {
+  color: #9ec1ff;
+}
+:root[data-theme="light"] .block.msg2 .block-role {
+  color: #24478f;
+}
+.block.collision {
+  border-color: var(--warn);
+  background: var(--warn-soft);
+}
+.block.collision .block-role {
+  color: var(--warn-text);
+}
+.block .hex {
+  color: var(--text-dim);
+  word-break: break-all;
+}
+
+/* --- Shared tag line --- */
+.shared-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  margin: 0.6rem 0 0;
+}
+.shared-tag-label {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--accent-ink);
+  background: var(--accent);
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.72rem;
+}
+.shared-tag .hex {
+  color: var(--text);
+  word-break: break-all;
+}
+
+/* --- Stepped math --- */
+.math {
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+}
+.math .step {
+  margin: 0 0 0.55rem;
+  padding-left: 1.4rem;
+  text-indent: -1.4rem;
+  color: var(--text);
+}
+.math .step .k {
+  color: var(--accent-text);
+}
+.math .step.hidden-step {
+  display: none;
+}
+.math .eq {
+  color: var(--text);
+}
+.math .val {
+  color: var(--text-dim);
+  word-break: break-all;
+}
+
+/* --- Image forgery cards --- */
+.img-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-top: 0.7rem;
+}
+.img-fig {
+  margin: 0;
+  text-align: center;
+}
+.img-fig figcaption {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.glyph-canvas {
+  width: 120px;
+  height: 120px;
+  image-rendering: pixelated;
+  border-radius: 8px;
+  border: 1px solid var(--border-strong);
+  background: #000;
+}
+.noise-canvas {
+  width: 78px;
+  height: 78px;
+  image-rendering: pixelated;
+  border-radius: 8px;
+  border: 1px dashed var(--border-strong);
+  background: #000;
+  opacity: 0.95;
+}
+
+/* --- Tag before/after equality visual --- */
+.tageq {
+  margin-top: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+  background: var(--bg);
+  overflow-x: auto;
+}
+.tageq:empty {
+  display: none;
+}
+.tageq-cap {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+.tagrow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.25rem 0;
+}
+.tagrow-label {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  min-width: 5.5rem;
+}
+.tagcells {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+.tagcell {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  padding: 0.15rem 0.3rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: var(--panel-2);
+}
+.tagcell.diff {
+  color: var(--alarm-text);
+  border-color: var(--alarm-border);
+  background: var(--alarm-soft);
+  text-decoration: underline;
+  text-decoration-style: double;
+  font-weight: 700;
+}
+.tagcell.same {
+  color: var(--ok-text);
+  border-color: var(--ok);
+  background: var(--ok-soft);
+}
+
+/* --- Tables (affected AEADs) --- */
+.aead-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.aead-table caption {
+  text-align: left;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  margin-bottom: 0.5rem;
+}
+.aead-table th,
+.aead-table td {
+  border: 1px solid var(--border);
+  padding: 0.55rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+}
+.aead-table th {
+  background: var(--panel-2);
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 700;
+  font-size: 0.78rem;
+  border-radius: 6px;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--border-strong);
+}
+.pill.vuln {
+  color: var(--alarm-text);
+  border-color: var(--alarm-border);
+  background: var(--alarm-soft);
+}
+.pill.depends {
+  color: var(--warn-text);
+  border-color: var(--warn);
+  background: var(--warn-soft);
+}
+.pill.safe {
+  color: var(--ok-text);
+  border-color: var(--ok);
+  background: var(--ok-soft);
+}
+
+/* --- Fix panel results --- */
+.fix-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+.fix-item {
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  background: var(--panel-2);
+}
+.fix-item.commits {
+  border-left-color: var(--ok);
+}
+.fix-item.fails {
+  border-left-color: var(--warn);
+}
+.fix-item h4 {
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.fix-item .fix-outcome {
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+.fix-item.commits .fix-outcome {
+  color: var(--ok-text);
+}
+.fix-item.fails .fix-outcome {
+  color: var(--warn-text);
+}
+.fix-item p {
+  margin: 0.3rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+
+/* --- "What this isn't" notes & sibling links --- */
+.scope-note {
+  border: 1px dashed var(--border-strong);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin: 0.8rem 0;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  background: var(--bg);
+}
+.scope-note strong {
+  color: var(--text);
+}
+
+/* --- Progressive disclosure --- */
+#app details {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  margin: 0.8rem 0;
+  background: var(--bg);
+}
+#app summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent-text);
+}
+#app details[open] summary {
+  margin-bottom: 0.5rem;
+}
+
+.status-line {
+  min-height: 1.2rem;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-top: 0.5rem;
+}
+
+/* --- Scripture footer --- */
+.scripture-footer {
+  max-width: var(--maxw);
+  margin: 2rem auto 0;
+  padding: 1.4rem clamp(1rem, 4vw, 2rem) 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+  font-style: italic;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    animation: fade 0.35s ease both;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
