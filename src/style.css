@@ -13,7 +13,15 @@
   --text-dim: #aeb6c0;
   --text-muted: #8b949e;
   --border: #30363d;
-  --border-strong: #4d5866;
+  /* Control boundaries (#app input[type="text"], #app textarea, and the
+     .btn.secondary that shares their token). Those controls are filled with
+     --bg — the exact colour of the page behind them, 1.00:1 — so the border is
+     the only thing that makes the control visible, and WCAG 2.1 SC 1.4.11
+     requires 3:1. The previous value #4d5866 measured 2.62:1 at best / 2.18:1
+     at worst against the real adjacent surfaces; raised to 3.92:1 on --bg,
+     3.58:1 on --panel, 3.26:1 on --panel-2. --border is unchanged and still
+     drives the decorative outlines. */
+  --border-strong: #69737e;
 
   --accent: #059669; /* brand fill / borders (the demo's catalog accent) */
   --accent-text: #34d399; /* accent used as text/link on dark bg */
@@ -49,7 +57,9 @@
   --text-dim: #47505b;
   --text-muted: #5a636e;
   --border: #d0d7de;
-  --border-strong: #a9b2bd;
+  /* Light-theme control boundary: #a9b2bd was 2.15:1 at best / 1.89:1 at worst;
+     raised to 3.70:1 on --bg, 3.48:1 on --panel, 3.27:1 on --panel-2. */
+  --border-strong: #7f858e;
 
   --accent: #047857;
   --accent-text: #036b4d;
