@@ -10,7 +10,7 @@
 import { forgeTwoKeyCiphertext } from '../crypto/salamander'
 import { toHex as fieldHex } from '../crypto/gf128'
 import type { Forgery } from '../crypto/types'
-import { h, shortHex } from './dom'
+import { h, shortHex, srOnly } from './dom'
 
 let f: Forgery | null = null
 
@@ -52,7 +52,10 @@ export function buildMathPanel(): HTMLElement {
   }
 
   function val(u: Uint8Array): HTMLElement {
-    return h('span', { class: 'val', 'aria-label': fieldHex(u), title: fieldHex(u) }, [shortHex(u, 6)])
+    return h('span', { class: 'val', title: fieldHex(u) }, [
+      shortHex(u, 6),
+      srOnly(` — full value ${fieldHex(u)}`),
+    ])
   }
 
   /** A 16-byte tag as a row of cells; each cell marked same/diff vs `other`. */
@@ -61,7 +64,13 @@ export function buildMathPanel(): HTMLElement {
       const same = b === other[i]
       return h('span', { class: `tagcell ${same ? 'same' : 'diff'}` }, [b.toString(16).padStart(2, '0')])
     })
-    return h('div', { class: 'tagrow' }, [h('span', { class: 'tagrow-label' }, [label]), h('span', { class: 'tagcells', 'aria-label': fieldHex(bytes) }, cells)])
+    // The cells themselves spell out every byte, so the `aria-label` this used
+    // to carry only repeated them — and, being on a role-less <span>, was
+    // discarded anyway.
+    return h('div', { class: 'tagrow' }, [
+      h('span', { class: 'tagrow-label' }, [label]),
+      h('span', { class: 'tagcells' }, cells),
+    ])
   }
 
   function renderEquality(before1: Uint8Array, before2: Uint8Array, after?: Uint8Array): void {

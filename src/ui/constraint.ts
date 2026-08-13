@@ -7,7 +7,7 @@
  */
 
 import { keystreamPad, overlapView } from '../crypto/salamander'
-import { h, printable, shortHex, toHex } from './dom'
+import { h, printable, shortHex, srOnly, toHex } from './dom'
 
 const enc = new TextEncoder()
 
@@ -81,7 +81,10 @@ function render(out: HTMLElement, aView: Uint8Array, bView: Uint8Array, pad: Uin
       h('p', { class: 'step' }, [
         h('span', { class: 'k' }, ['pad']),
         ' KS₁ ⊕ KS₂ at block 1 = ',
-        h('span', { class: 'val', 'aria-label': `pad value ${toHex(pad)}`, title: toHex(pad) }, [shortHex(pad, 6)]),
+        h('span', { class: 'val', title: toHex(pad) }, [
+          shortHex(pad, 6),
+          srOnly(` — full pad value ${toHex(pad)}`),
+        ]),
         ' — fixed by the two keys, uniform-looking, not chosen.',
       ]),
       h('p', { class: 'step' }, [

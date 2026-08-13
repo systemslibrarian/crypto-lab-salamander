@@ -15,6 +15,19 @@ export function h<K extends keyof HTMLElementTagNameMap>(
   return el
 }
 
+/**
+ * A visually-hidden span carrying text that must be announced but not shown.
+ *
+ * This is the replacement for `aria-label` on `<span>` / `<p>`. ARIA prohibits
+ * a naming attribute on an element with no role, browsers discard it, and axe
+ * files the problem under `incomplete` rather than `violations` — so the whole
+ * class of "the full hex is in the aria-label" was silently reaching nobody.
+ * A real text node cannot be discarded.
+ */
+export function srOnly(text: string): HTMLElement {
+  return h('span', { class: 'sr-only' }, [text])
+}
+
 export function toHex(u: Uint8Array): string {
   return Array.from(u, (b) => b.toString(16).padStart(2, '0')).join('')
 }

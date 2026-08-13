@@ -14,7 +14,7 @@
 import { forgeTwoKeyCiphertext, MAX_MSG_LEN } from '../crypto/salamander'
 import { gcmDecrypt } from '../crypto/aes'
 import type { Forgery } from '../crypto/types'
-import { h, printable, shortHex, toHex } from './dom'
+import { h, printable, shortHex, srOnly, toHex } from './dom'
 
 const enc = new TextEncoder()
 let current: Forgery | null = null
@@ -110,7 +110,10 @@ function readerCard(title: string, keyLabel: string, key: Uint8Array, verified: 
     h('div', {}, [badge(verified, verified ? 'Tag VERIFIES (WebCrypto)' : 'Tag REJECTED (WebCrypto)')]),
     h('p', { class: 'reader-msg' }, [message ?? '(no readable message found)']),
     h('p', { class: 'reader-label' }, [note]),
-    h('p', { class: 'reader-label', 'aria-label': `${keyLabel} full value ${toHex(key)}`, title: toHex(key) }, [`${keyLabel} = ${shortHex(key)}`]),
+    h('p', { class: 'reader-label', title: toHex(key) }, [
+      `${keyLabel} = ${shortHex(key)}`,
+      srOnly(` — full value ${toHex(key)}`),
+    ]),
   ])
 }
 
@@ -125,7 +128,7 @@ function renderResult(out: HTMLElement, f: Forgery): void {
     blockmap.append(
       h('div', { class: `block ${role.kind}`, title: role.label }, [
         h('span', { class: 'block-role' }, [`${roleText} · blk ${role.index + 1}`]),
-        h('span', { class: 'hex', 'aria-label': `block ${role.index + 1} bytes ${toHex(blk)}` }, [shortHex(blk, 5)]),
+        h('span', { class: 'hex' }, [shortHex(blk, 5), srOnly(` — full bytes ${toHex(blk)}`)]),
       ]),
     )
   })
@@ -170,7 +173,9 @@ function renderResult(out: HTMLElement, f: Forgery): void {
     blockmap,
     h('p', { class: 'shared-tag' }, [
       h('span', { class: 'shared-tag-label' }, ['ONE shared tag']),
-      h('span', { class: 'hex', 'aria-label': `shared tag bytes ${toHex(f.tag)}` }, [toHex(f.tag)]),
+      // No hidden copy here: the element's own text IS the complete 32-hex-char
+      // tag, so the `aria-label` it used to carry only repeated it.
+      h('span', { class: 'hex' }, [toHex(f.tag)]),
       h('span', { class: 'dim' }, [' — the same 16 bytes verify under K₁ and K₂.']),
     ]),
     h('h3', {}, ['Cryptographic result — two independent tag checks']),
