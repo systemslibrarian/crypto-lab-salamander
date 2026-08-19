@@ -621,6 +621,18 @@ body {
 }
 
 /* --- Tables (affected AEADs) --- */
+/*
+ * The wrapper is the table's own scroller. A three-column data table cannot
+ * reflow to phone width without losing the row-to-row comparison that is the
+ * point of it, so WCAG 1.4.10 is met the other way: the table scrolls inside
+ * this region rather than scrolling the document. The markup already carries
+ * `role="region"`, an `aria-label` and `tabindex="0"` for exactly that — the
+ * overflow rule they were written for was never declared, so at 380px the
+ * table's 372px min-content width pushed the document to 405px.
+ */
+.table-wrap {
+  overflow-x: auto;
+}
 .aead-table {
   width: 100%;
   border-collapse: collapse;
