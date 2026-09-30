@@ -6,3 +6,4 @@ dist-ssr
 playwright-report
 test-results
 .vite
+chat.md
