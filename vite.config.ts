@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 
 // Project pages subpath. Read the real repo name; do not guess.
 export default defineConfig({
