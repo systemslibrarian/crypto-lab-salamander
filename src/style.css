@@ -207,7 +207,7 @@ body {
    page in both themes, it silently overrode all of these:
      .verdict.alarm .verdict-title  (--alarm-text)   .status-line   (--text-dim)
      .verdict.safe  .verdict-title  (--ok-text)      .sep-note      (--text-muted)
-     .fix-item.commits .fix-outcome (--ok-text)      .tageq-cap     (--text-dim)
+     .fix-item.control .fix-outcome (--ok-text)      .tageq-cap     (--text-dim)
      .fix-item.fails   .fix-outcome (--warn-text)    .reader-label  (--text-muted)
      .fix-item p                    (--text-dim)     .cl-hero-sub   (--text-dim)
                                                      .cl-hero-desc  (--text-dim)
@@ -695,7 +695,7 @@ body {
   padding: 0.85rem 1rem;
   background: var(--panel-2);
 }
-.fix-item.commits {
+.fix-item.control {
   border-left-color: var(--ok);
 }
 .fix-item.fails {
@@ -713,7 +713,7 @@ body {
   font-weight: 700;
   font-size: 0.8rem;
 }
-.fix-item.commits .fix-outcome {
+.fix-item.control .fix-outcome {
   color: var(--ok-text);
 }
 .fix-item.fails .fix-outcome {

@@ -49,10 +49,14 @@ test('image panel: both tags verify on two rendered images', async ({ page }) =>
   await expect(page.locator('.verdict-title', { hasText: 'two truths' })).toBeVisible()
 })
 
-test('fix panel: AAD folk-fix fails to commit; padding and HMAC commit', async ({ page }) => {
+test('fix panel labels one actual counterexample and two ordinary controls without a proof claim', async ({ page }) => {
   await page.goto('.')
-  await page.locator('#app button', { hasText: 'Run all three fixes' }).click()
+  await page.locator('#app button', { hasText: 'Run the counterexample' }).click()
   await expect(page.locator('.fix-item')).toHaveCount(3)
   await expect(page.locator('.fix-item.fails')).toHaveCount(1)
-  await expect(page.locator('.fix-item.commits')).toHaveCount(2)
+  await expect(page.locator('.fix-item.control')).toHaveCount(2)
+  await expect(page.locator('.fix-item .result-badge', { hasText: 'COUNTEREXAMPLE' })).toHaveCount(1)
+  await expect(page.locator('.fix-item .result-badge', { hasText: 'ORDINARY CONTROL' })).toHaveCount(2)
+  await expect(page.locator('.fix-item .result-badge', { hasText: 'COMMITS' })).toHaveCount(0)
+  await expect(page.locator('#fix-h').locator('..')).toContainText('no commitment proof is claimed')
 })

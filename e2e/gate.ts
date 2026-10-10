@@ -694,11 +694,13 @@ export async function driveAllStates(page: Page, theme: string): Promise<void> {
 
   // ── Panel 6: the three candidate fixes, two committing and one folk fix ──
   await expect(page.locator('.fix-item')).toHaveCount(0)
-  await press(page, 'Run all three fixes against a live forgery')
+  await press(page, 'Run the counterexample and two ordinary controls')
   await expect(page.locator('.fix-item')).toHaveCount(3)
-  await expect(page.locator('.fix-item.commits')).toHaveCount(2)
+  await expect(page.locator('.fix-item.control')).toHaveCount(2)
+  await expect(page.locator('.fix-item .result-badge', { hasText: 'COUNTEREXAMPLE' })).toHaveCount(1)
+  await expect(page.locator('.fix-item .result-badge', { hasText: 'ORDINARY CONTROL' })).toHaveCount(2)
   await expect(page.locator('.fix-item.fails')).toHaveCount(1)
-  await scanAt('panel 6 three fixes run, the AAD folk fix fails')
+  await scanAt('panel 6 counterexample and ordinary controls, no commitment proof')
 
   // ── The three expert disclosures, opened the way a reader opens them ─────
   const summaries = page.locator('details:not([open]) > summary')
