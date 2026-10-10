@@ -135,7 +135,7 @@ async function checkCommitPrefix(
 }
 
 /**
- * The robust fix: attach a key-binding commitment. Here, tag_commit =
+ * Illustrative candidate: attach a key-binding tag. Here, tag_commit =
  * HMAC-SHA-256(K, nonce), checked alongside the ciphertext. Different random
  * keys are expected to give different tags, not guaranteed to do so. This
  * custom illustration is not the paper's analyzed transform with separately

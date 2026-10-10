@@ -57,7 +57,7 @@ npm install
 npm run dev        # http://localhost:5173/crypto-lab-salamander/
 npm test           # unit tests + spec KATs
 npm run build      # type-check + production build
-npm run test:a11y  # WCAG 2.1 AA gate (both themes) against the built site
+npm run test:a11y  # WCAG 2.1 AA gate (dark, desktop/380px) against the built site
 ```
 
 ## Related Demos

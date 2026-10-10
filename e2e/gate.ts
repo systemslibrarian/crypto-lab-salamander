@@ -692,7 +692,7 @@ export async function driveAllStates(page: Page, theme: string): Promise<void> {
   await expect(page.getByText('VERDICT: consistent view')).toBeVisible()
   await scanAt('panel 5 consistent view, the safe branch')
 
-  // ── Panel 6: the three candidate fixes, two committing and one folk fix ──
+  // ── Panel 6: one counterexample and two ordinary candidate-defense controls ──
   await expect(page.locator('.fix-item')).toHaveCount(0)
   await press(page, 'Run the counterexample and two ordinary controls')
   await expect(page.locator('.fix-item')).toHaveCount(3)
