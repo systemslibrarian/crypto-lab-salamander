@@ -23,17 +23,19 @@ The security model this breaks: any system that treats a verifying tag as proof 
 3. **The catch: why not two arbitrary messages?** — the honesty exhibit. Try to force both readers to see chosen text at the *same* offset and hit the wall: `P₁ ⊕ P₂ = KS₁ ⊕ KS₂` is a fixed pad, so you get exactly one free message per offset. This is *why* the attack gives each reader its own offset.
 4. **The math, stepped** — the GCM tag as a polynomial in `H`, the two hash subkeys, and the single GF(2¹²⁸) linear equation, solved with a real field inverse. The two tags are shown byte-for-byte **differing before** the solve and **identical after**. Steps reveal on click, never on a timer.
 5. **The blind moderator** — the abuse-reporting scenario: one attachment, the recipient is harassed and reports it, the service decrypts the same bytes and sees something harmless. Both tags verify; the report can't be substantiated. The original Facebook Messenger blind spot.
-6. **The fix: commit to the key** — three candidate defenses run for real against a live forgery: "hash the key into the AAD" (a folk fix that **does not** commit), a constant-prefix padding check (commits), and an HMAC key-binding commitment (commits). Each verdict is the real verifier's output.
+6. **The fix: commit to the key** — one actual two-key counterexample against "hash the key into the AAD", plus two **ordinary honest-encryption/random-wrong-key controls** for constant-prefix padding and an illustrative HMAC tag. Bare GCM also normally rejects a random wrong key, so those controls do not establish added commitment or show a defense stopping the displayed forgery. Each row identifies its evidence kind and verifier outcomes; no successful control is a commitment proof.
+
+   Key binding is computational under cryptographic assumptions, not a guarantee that different keys always yield different outputs. The cited AES-GCM padding analysis gives about 64-bit commitment security for this one 128-bit zero block; two blocks target 128 bits. The custom `HMAC(K, nonce)` illustration does not implement the paper's analyzed generic transform with separately derived encryption and commitment keys. No binding proof for that custom construction is claimed here.
 7. **Which AEADs are affected** — per construction, without generalizing: AES-GCM, ChaCha20-Poly1305, and AES-GCM-SIV are not committing; Ascon is a sponge AEAD whose committing security is construction-specific. Includes the bridge from two keys to the **partitioning-oracle** key-search attack.
 
 ## When to Use It
 
 - **Use** committing / key-binding AEADs when a ciphertext's key identity matters: message franking and abuse reporting, key rotation and multi-recipient envelopes, password-based encryption, subscription/DRM, or any partitioning-oracle-exposed protocol.
-- **Do NOT** rely on a bare AES-GCM (or ChaCha20-Poly1305, or AES-GCM-SIV) tag as evidence that a ciphertext belongs to one specific key. It never was. Add an explicit commitment (Panel 4) or use a committing transform.
+- **Do NOT** rely on a bare AES-GCM (or ChaCha20-Poly1305, or AES-GCM-SIV) tag as evidence that a ciphertext belongs to one specific key. It never was. Panel 6 explains candidate defenses and their evidence limits; use an analyzed committing transform for production.
 
 ## Live Demo
 
-<https://systemslibrarian.github.io/crypto-lab-salamander/> — forge two-key ciphertexts with your own messages, step through the GF(2¹²⁸) solve, run the abuse scenario, and test three fixes against a genuine forgery. All in-browser; no data leaves the page.
+<https://systemslibrarian.github.io/crypto-lab-salamander/> — forge two-key ciphertexts with your own messages, step through the GF(2¹²⁸) solve, run the abuse scenario, and distinguish the AAD-hash counterexample from two ordinary defense controls. All in-browser; no data leaves the page.
 
 ## What Can Go Wrong
 
@@ -55,7 +57,7 @@ npm install
 npm run dev        # http://localhost:5173/crypto-lab-salamander/
 npm test           # unit tests + spec KATs
 npm run build      # type-check + production build
-npm run test:a11y  # WCAG 2.1 AA gate (both themes) against the built site
+npm run test:a11y  # WCAG 2.1 AA gate (dark, desktop/380px) against the built site
 ```
 
 ## Related Demos
@@ -68,9 +70,9 @@ npm run test:a11y  # WCAG 2.1 AA gate (both themes) against the built site
 
 Real crypto only: AES-GCM, AES-CTR (for raw block / keystream access), HMAC-SHA-256, and SHA-256 all come from WebCrypto. GF(2¹²⁸), GHASH, and the tag are hand-rolled so the polynomial is inspectable, then checked against the spec.
 
-- **30 unit tests** (Vitest), including **3 NIST GCM known-answer tests** (McGrew–Viega / SP 800-38D Test Cases 1–3), verified both as tags matching the spec vectors and as full ciphertext+tag matching WebCrypto. Also a **50-pair property test** (the forgery holds across random keys/nonces), a raw-payload region test (the image path), and the keystream-difference constraint.
-- KAT / core files: [`ghash.test.ts`](src/crypto/ghash.test.ts) (GCM KATs), [`gf128.test.ts`](src/crypto/gf128.test.ts) (field arithmetic + inverse), [`salamander.test.ts`](src/crypto/salamander.test.ts) (the two-key forgery, verified by WebCrypto), [`commit.test.ts`](src/crypto/commit.test.ts) (which fixes commit).
-- **CI gates the deploy on two Playwright suites:** a functional suite ([`e2e/forge.spec.ts`](e2e/forge.spec.ts)) asserting the forgery, verdict separation, tamper rejection, tag-equality visual, and fix outcomes; and an **accessibility gate** (`@axe-core/playwright`) scanning the production build for zero WCAG 2.1 A/AA violations in **both** themes. Either failing blocks the Pages deploy.
+- **34 unit tests** (Vitest), including **3 NIST GCM known-answer tests** (McGrew–Viega / SP 800-38D Test Cases 1–3), verified both as tags matching the spec vectors and as full ciphertext+tag matching WebCrypto. Also a **50-pair property test** (the forgery holds across random keys/nonces), a raw-payload region test (the image path), the keystream-difference constraint, and failed/ambiguous defense-evidence controls.
+- KAT / core files: [`ghash.test.ts`](src/crypto/ghash.test.ts) (GCM KATs), [`gf128.test.ts`](src/crypto/gf128.test.ts) (field arithmetic + inverse), [`salamander.test.ts`](src/crypto/salamander.test.ts) (the two-key forgery, verified by WebCrypto), [`commit.test.ts`](src/crypto/commit.test.ts) (actual counterexample and ordinary controls), [`commit-evidence.test.ts`](src/crypto/commit-evidence.test.ts) (failed/ambiguous controls never become commitment proofs).
+- **CI gates the deploy on two Playwright suites:** a functional suite ([`e2e/forge.spec.ts`](e2e/forge.spec.ts)) asserting the forgery, verdict separation, tamper rejection, tag-equality visual, and evidence labels; and an **accessibility gate** (`@axe-core/playwright`) scanning the production build for zero WCAG 2.1 A/AA violations in the configured **dark** theme at desktop and 380px. Either failing blocks the Pages deploy.
 
 ```bash
 npm test && npm run build && npm run test:a11y

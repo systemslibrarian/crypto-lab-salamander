@@ -24,9 +24,9 @@ import {
  * only state in which the two tags differ and the only one that paints
  * `.tagcell.diff`, then solved; panel 5 in both branches — moderation blind, and
  * the consistent view when both messages agree; panel 6's three candidate fixes,
- * two committing and one folk fix that does not; and finally all three expert
+ * two ordinary controls and one AAD-hash counterexample; and finally all three expert
  * disclosures opened by clicking their summaries. Every one of those states is
- * scanned, in both themes, at desktop and phone width.
+ * scanned, in the configured dark theme, at desktop and phone width.
  *
  * See `gate.ts` for why nothing is injected into the page (this lab OPTS IN to
  * motion under `prefers-reduced-motion: no-preference` rather than cancelling it
