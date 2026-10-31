@@ -245,9 +245,10 @@ export async function boot(page: Page, theme: 'dark' | 'light'): Promise<void> {
   await expect(page.locator('html')).toHaveAttribute('data-theme', theme)
   await assertSingleBanner(page)
 
-  // All nine sections mount: the plain-language intro, the seven numbered
-  // panels, and the "what this lab is not" scope notes.
-  await expect(page.locator('#panels > section.panel')).toHaveCount(9)
+  // All ten sections mount: intro, seven numbered panels, the research
+  // property/fault-model comparison, and the scope notes.
+  await expect(page.locator('#panels > section.panel')).toHaveCount(10)
+  await expect(page.locator('#property-scope-h')).toBeVisible()
 
   // ── autoRun() has already produced two results ───────────────────────────
   await expect(page.locator('#attack-out .verdict.alarm .verdict-title')).toContainText(
