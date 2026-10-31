@@ -89,3 +89,7 @@ npm test && npm run build && npm run test:a11y
 *Part of the [Crypto Lab](https://crypto-lab.systemslibrarian.dev/) suite.*
 
 *"So whether you eat or drink or whatever you do, do it all for the glory of God." — 1 Corinthians 10:31*
+
+## Research review extension 31 October 2026
+
+R20261031-11: A source-linked comparison separates authenticity, full-context commitment, passive leakage, restricted differential faults, stronger stuck-at faults and combined fault-then-leak models. A complete claim needs type, location, count, timing, leakage and allowed decryption queries. The comparison grants no implementation a physical-security verdict.
