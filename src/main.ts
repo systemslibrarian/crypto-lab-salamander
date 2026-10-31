@@ -7,6 +7,7 @@ import { buildMathPanel } from './ui/mathstep'
 import { buildAbusePanel } from './ui/abuse'
 import { buildFixPanel } from './ui/fix'
 import { buildAffectedPanel, buildScopeNotes } from './ui/affected'
+import { buildPropertyScope } from './ui/property-scope'
 
 /** Plain-language on-ramp: what this is / why it matters, zero math, up front. */
 function buildIntro(): HTMLElement {
@@ -45,6 +46,7 @@ function mount(): void {
     buildAbusePanel(),
     buildFixPanel(),
     buildAffectedPanel(),
+    buildPropertyScope(),
     buildScopeNotes(),
   )
   autoRun()
