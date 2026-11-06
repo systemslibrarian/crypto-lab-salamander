@@ -14,7 +14,7 @@ export function buildPropertyScope(): HTMLElement {
     <p>A complete fault claim must name the fault type, location, count, timing, leakage and allowed decryption queries together. Those exact restrictions belong to each cited theorem; this comparison does not instantiate them or assign any implementation a fault-resistance verdict.</p>
     <p>One Encrypt-then-MAC scenario corrupts only the MAC-side read of a ciphertext while leaving the emitted ciphertext unchanged; the attacker then modifies that emitted ciphertext to match. This particular implementation fault is outside the ordinary classical proof model. Distinguish that scenario from a stuck-at fault, a differential fault, a combined fault-then-leak attack and a fault during decryption. None earns a general “physically secure” badge or a recommendation to deploy a custom mode.</p>
     <p>Sources: <a href="https://doi.org/10.46586/tosc.v2024.i2.348-370" target="_blank" rel="noopener noreferrer">Context-Committing Security of Leveled Leakage-Resilient AEAD</a>, pp. 2–3, 6–9, 14–20;
-    <a href="https://doi.org/10.46586/tosc.v2022.i4.291-324" target="_blank" rel="noopener noreferrer">Exploring Integrity of AEADs with Faults</a>, pp. 9–15, 26–34;
+    <a href="https://doi.org/10.46586/tosc.v2022.i4.291-324" target="_blank" rel="noopener noreferrer">Exploring Integrity of AEADs with Faults</a>, pp. 9–15, 20, 26–34;
     <a href="https://doi.org/10.46586/tosc.v2025.i4.199-230" target="_blank" rel="noopener noreferrer">On Constructing AEs with Leakage and Faults</a>, pp. 2, 14–16, 22–25, 31–32. This is a paper-derived scope comparison, not a physical attack reproduction.</p>`;
   return panel;
 }
