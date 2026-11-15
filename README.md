@@ -13,7 +13,7 @@ AES-GCM is **not key-committing**. Its tag is `T = GHASH_H(C ‖ L) ⊕ E_K(J0)`
 The security model this breaks: any system that treats a verifying tag as proof of *which* key, or *which* message, was really sent. It is a **"system fails, primitive holds"** result — AES-GCM's integrity guarantee is intact; the guarantee callers *assumed* was never given.
 
 - **Primitives:** AES-GCM (SP 800-38D); GHASH as a polynomial over GF(2¹²⁸); HMAC-SHA-256 (fix panel); SHA-256 (folk-fix).
-- **Attack:** invisible salamanders / key non-commitment (Dodis, Grubbs, Ristenpart, Woodage, *Fast Message Franking*, CRYPTO 2018/2019); the Facebook Messenger message-franking finding.
+- **Attack:** invisible salamanders / key non-commitment (Dodis, Grubbs, Ristenpart, Woodage, *Fast Message Franking*, [CRYPTO 2018](https://doi.org/10.1007/978-3-319-96884-1_6), pp. 155–186; full version [ePrint 2019/016](https://eprint.iacr.org/2019/016)); the Facebook Messenger message-franking finding.
 - **Security model:** teaching demo, per-session in-memory keys, no backend, no persistence.
 
 ## Exhibits
@@ -93,3 +93,7 @@ npm test && npm run build && npm run test:a11y
 ## Research review extension 31 October 2026
 
 R20261031-11: A source-linked comparison separates authenticity, full-context commitment, passive leakage, restricted differential faults, stronger stuck-at faults and combined fault-then-leak models. A complete claim needs type, location, count, timing, leakage and allowed decryption queries. The comparison grants no implementation a physical-security verdict.
+
+## Citation review 15 November 2026
+
+The *Fast Message Franking* reference was given as "CRYPTO 2018/2019". There is one conference version: Dodis, Grubbs, Ristenpart and Woodage, *Fast Message Franking: From Invisible Salamanders to Encryptment*, CRYPTO 2018, LNCS, pp. 155–186 ([DOI 10.1007/978-3-319-96884-1_6](https://doi.org/10.1007/978-3-319-96884-1_6)); the IACR accepted-papers list for Crypto 2018 (Santa Barbara, 19–23 August 2018) carries it, and the "2019" is the full version posted as [ePrint 2019/016](https://eprint.iacr.org/2019/016). Both the README and `src/ui/abuse.ts` now say so.

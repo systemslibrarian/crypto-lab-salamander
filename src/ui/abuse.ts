@@ -6,9 +6,10 @@
  * moderation system cannot tell which message was "really" sent.
  *
  * This is the original Facebook Messenger message-franking finding
- * (Dodis–Grubbs–Ristenpart–Woodage, CRYPTO 2018 / 2019). The demo uses two keys
- * as a faithful stand-in for the two views; the root cause is identical —
- * AES-GCM does not commit to the key a ciphertext was produced under.
+ * (Dodis–Grubbs–Ristenpart–Woodage, CRYPTO 2018; full version ePrint 2019/016).
+ * The demo uses two keys as a faithful stand-in for the two views; the root
+ * cause is identical — AES-GCM does not commit to the key a ciphertext was
+ * produced under.
  */
 
 import { forgeTwoKeyCiphertext, MAX_MSG_LEN } from '../crypto/salamander'
